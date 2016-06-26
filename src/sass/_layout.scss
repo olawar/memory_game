@@ -1,0 +1,51 @@
+[data-game] {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+  margin: 0 auto;
+  width: 100vw;
+  max-width: 1200px;
+  height: 100vh;
+  max-height: 960px;
+  border: 2px solid $inactive;
+}
+
+.tile {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 3px solid darken($active, 10%);
+  border-radius: 10px;
+  background-color: $active;
+  z-index: 1;
+  transition: all 0.2s ease-in-out;
+  background-size: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  &:hover {
+    transform: rotate(15deg) scale(1.2);
+    z-index: 3;
+  }
+
+  &.flipped {
+    background-color: #fff;
+    border: 5px solid #e5e5e5;
+  }
+
+  &.inactive {
+    background-color: $inactive;
+  }
+
+  &.right {
+    border: 5px solid $right;
+  }
+
+  &.wrong {
+    border: 5px solid $wrong;
+  }
+
+}
