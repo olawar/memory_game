@@ -19,7 +19,7 @@ var app = {
             "tiles_images_source": "images/"
         };
 
-        // transforming images
+        // transforming images - from local source @TODO
 
         // $.ajax({
         //     url : options.tiles_images_source,
@@ -33,8 +33,9 @@ var app = {
         //     }
         // });
 
-
         // setting the gameboard
+
+        // in DOM - based on options
 
         for (var i = 0; i < (options.tiles_in_a_column * options.tiles_in_a_row); i++) {
             $('[data-game]').append('<div class="tile"></div>');
@@ -45,7 +46,9 @@ var app = {
             })
         }
 
-        var gameSetup = {0: "ii"};
+        // getting the right images & randomizing them
+
+        var gameSetup = {};
 
         $.ajax({
             type: 'GET',
@@ -56,30 +59,22 @@ var app = {
             dataType: 'json',
             success: function(data) {
                 var randomizedImages = [];
-                 $.each(data, function(key, val) {
+                $.each(data, function(key, val) {
                     randomizedImages.push(val);
                 });
                 shuffleArray(randomizedImages);
 
                 for (var i = 0; i < randomizedTiles.length; i = i + 2) {
+                    randomizedTiles[i].attr('id', 'tile-' + i);
+                    gameSetup['tile-' + i] = [randomizedTiles[i], randomizedImages[0]];
 
-                    // gameSetup[i].push( {randomizedTiles[i], randomizedImages[0]} );
-                    // gameSetup[i + 1] = {randomizedTiles[i], randomizedImages[0]};
-
-
-
-                    $(randomizedTiles[i]).css('background-image', 'url("http://www.warzecha.org/ola/memory/images/' + randomizedImages[0] + '")');
-                    $(randomizedTiles[i + 1]).css('background-image', 'url("http://www.warzecha.org/ola/memory/images/' + randomizedImages[0] + '")');
+                    randomizedTiles[i + 1].attr('id', 'tile-' + Number.parseInt(i + 1));
+                    gameSetup['tile-' + Number.parseInt(i + 1)] = [randomizedTiles[i + 1], randomizedImages[0]];
 
                     randomizedImages.shift();
-
-                // return gameSetup;
-
                 }
             }
         });
-
-        // console.log(gameSetup);
 
         var randomizedTiles = [];
         $('.tile').each(function(index, el) {
@@ -99,13 +94,17 @@ var app = {
             return array;
         }
 
-        // behavior on click
+        // actions on click - once game setup is ready
 
-        $('.tile').on('click', function() {
-            $(this).addClass('flipped');
+        $(document).ajaxStop(function() {
+
+            $('.tile').on('click', function() {
+                $(this).addClass('flipped');
+                $(this).css('background-image', 'url("http://www.warzecha.org/ola/memory/images/' + gameSetup[$(this).attr('id')][1] + '")');
+
+            });
 
         });
-
     }
 };
 
