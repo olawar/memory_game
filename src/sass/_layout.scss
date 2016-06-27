@@ -1,3 +1,7 @@
+body {
+  overflow: hidden;
+}
+
 [data-game] {
   display: flex;
   flex-direction: row;
@@ -10,6 +14,9 @@
   height: 100vh;
   max-height: 960px;
   overflow: visible;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .tile {
@@ -27,7 +34,7 @@
   background-repeat: no-repeat;
 
   &:hover {
-    transform: rotate(15deg) scale(1.2);
+    transform: rotate(10deg) scale(1.2);
     z-index: 3;
   }
 
@@ -39,6 +46,16 @@
   &.inactive {
     background-color: $inactive;
     border: 5px solid $inactive;
+    cursor: default;
+
+    &:hover {
+      transform: none;
+    }
+  }
+
+  &.invisible {
+    opacity: 0;
+    visibility: hidden;
     cursor: default;
 
     &:hover {
