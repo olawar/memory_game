@@ -13,25 +13,12 @@ var app = {
 
         var options = {
             "tiles_in_a_row": 5,
-            "tiles_in_a_column": 6,
+            "tiles_in_a_column": 4,
             "preferred_tile_size": 200,
             "space_between_tiles": 10,
-            "tiles_images_source": "images/"
+            "tiles_images_source": "server", // "local as another option"
+            "tiles_images_address": "http://www.warzecha.org/ola/memory/enumpic.php"
         };
-
-        // transforming images - from local source @TODO
-
-        // $.ajax({
-        //     url : options.tiles_images_source,
-        //     success: function (data) {
-        //         console.log(data);
-        //         $(data).find("a").attr("href", function (i, val) {
-        //             if( val.match(/\.(jpe?g|png|gif)$/) ) {
-        //                 $("body").append( "<img src='" + val +"'>" );
-        //             }
-        //         });
-        //     }
-        // });
 
         // setting the gameboard
 
@@ -50,37 +37,55 @@ var app = {
 
         var gameSetup = {};
 
-        $.ajax({
-            type: 'GET',
-            url: 'http://www.warzecha.org/ola/memory/enumpic.php',
-            data: {
-                get_param: 'value'
-            },
-            dataType: 'json',
-            success: function(data) {
-                var randomizedImages = [];
-                $.each(data, function(key, val) {
-                    randomizedImages.push(val);
-                });
-                shuffleArray(randomizedImages);
-
-                for (var i = 0; i < randomizedTiles.length; i = i + 2) {
-                    randomizedTiles[i].attr('id', 'tile-' + i);
-                    gameSetup['tile-' + i] = [randomizedTiles[i], randomizedImages[0]];
-
-                    randomizedTiles[i + 1].attr('id', 'tile-' + Number.parseInt(i + 1));
-                    gameSetup['tile-' + Number.parseInt(i + 1)] = [randomizedTiles[i + 1], randomizedImages[0]];
-
-                    randomizedImages.shift();
-                }
-            }
-        });
-
         var randomizedTiles = [];
         $('.tile').each(function(index, el) {
             randomizedTiles.push($(this));
         });
         shuffleArray(randomizedTiles);
+
+        if (options.tiles_images_source == "local") {
+            // transforming images - from local source @TODO
+
+            // $.ajax({
+            //     url : options.tiles_images_source,
+            //     success: function (data) {
+            //         console.log(data);
+            //         $(data).find("a").attr("href", function (i, val) {
+            //             if( val.match(/\.(jpe?g|png|gif)$/) ) {
+            //                 $("body").append( "<img src='" + val +"'>" );
+            //             }
+            //         });
+            //     }
+            // });
+        }
+
+        else {
+            $.ajax({
+                type: 'GET',
+                url: options.tiles_images_address,
+                data: {
+                    get_param: 'value'
+                },
+                dataType: 'json',
+                success: function(data) {
+                    var randomizedImages = [];
+                    $.each(data, function(key, val) {
+                        randomizedImages.push(val);
+                    });
+                    shuffleArray(randomizedImages);
+
+                    for (var i = 0; i < randomizedTiles.length; i = i + 2) {
+                        randomizedTiles[i].attr('id', 'tile-' + i);
+                        gameSetup['tile-' + i] = [randomizedTiles[i], randomizedImages[0]];
+
+                        randomizedTiles[i + parseInt(1, 10)].attr('id', 'tile-' + i + parseInt(1, 10));
+                        gameSetup['tile-' + i + parseInt(1, 10)] = [randomizedTiles[i + parseInt(1, 10)], randomizedImages[0]];
+
+                        randomizedImages.shift();
+                    }
+                }
+            });
+        }
 
         // randomizating algorithm
 
@@ -94,7 +99,7 @@ var app = {
             return array;
         }
 
-        // actions on click - once game setup is ready
+        // gameplay - once game setup is ready
 
         $(document).ajaxStop(function() {
 
@@ -102,6 +107,27 @@ var app = {
                 $(this).addClass('flipped');
                 $(this).css('background-image', 'url("http://www.warzecha.org/ola/memory/images/' + gameSetup[$(this).attr('id')][1] + '")');
 
+                if ($('.tile-first').length) {
+                    if ($(this).css('background-image') == $('.tile-first').css('background-image')) {
+
+                        $(this).addClass('tile-second').addClass('right');
+                        $('.tile-first').addClass('right');
+
+                        setTimeout(function() {
+                            $('.tile-first, .tile-second').removeClass().addClass('tile').addClass('inactive');
+                        }, 800);
+
+                    } else {
+                        $(this).addClass('tile-second').addClass('wrong');
+                        $('.tile-first').addClass('wrong');
+
+                        setTimeout(function() {
+                            $('.tile-first, .tile-second').removeClass().addClass('tile').css('background-image', "");
+                        }, 800);
+                    }
+                } else {
+                    $(this).addClass('tile-first');
+                }
             });
 
         });

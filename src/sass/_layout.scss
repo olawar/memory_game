@@ -33,11 +33,17 @@
 
   &.flipped {
     background-color: #fff;
-    border: 5px solid #e5e5e5;
+    border: 5px solid $inactive;
   }
 
   &.inactive {
     background-color: $inactive;
+    border: 5px solid $inactive;
+    cursor: default;
+
+    &:hover {
+      transform: none;
+    }
   }
 
   &.right {
