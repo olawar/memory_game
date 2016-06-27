@@ -17,8 +17,8 @@ gulp.task('lint', function() {
 
 gulp.task('scripts', function () {
     gulp.src('src/js/**/*.js')
-        // .pipe(concat('scripts.js'))
-        // .pipe(uglify())
+        .pipe(concat('scripts.js'))
+        .pipe(uglify())
         .pipe(gulp.dest('dist'));
 });
 

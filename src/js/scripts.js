@@ -13,24 +13,42 @@ var app = {
 
         var options = {
             "tiles_in_a_row": 5,
-            "tiles_in_a_column": 4,
+            "tiles_in_a_column": 5,
             "preferred_tile_size": 200,
             "space_between_tiles": 10,
             "tiles_images_source": "server", // "local as another option"
             "tiles_images_address": "http://www.warzecha.org/ola/memory/enumpic.php"
         };
 
+        setGameboard();
+
         // setting the gameboard
 
         // in DOM - based on options
 
-        for (var i = 0; i < (options.tiles_in_a_column * options.tiles_in_a_row); i++) {
-            $('[data-game]').append('<div class="tile"></div>');
-            $('.tile').css({
-                'width': options.preferred_tile_size + 'px',
-                'max-width': "calc(100% / " + options.tiles_in_a_row + " - 2 * " + options.space_between_tiles + "px )",
-                'margin': options.space_between_tiles + 'px'
-            })
+        function setGameboard() {
+            if ((options.tiles_in_a_column * options.tiles_in_a_row) % 2 > 0) {
+                // the number of tiles cannot be odd, so we need to deal with this here
+                for (var i = 0; i < (options.tiles_in_a_column * (options.tiles_in_a_row - 1)); i++) {
+                    $('[data-game]').append('<div class="tile"></div>');
+                    $('.tile').css({
+                        'width': options.preferred_tile_size + 'px',
+                        'max-width': "calc(100% / " + options.tiles_in_a_row + " - 2 * " + options.space_between_tiles + "px )",
+                        'margin': options.space_between_tiles + 'px'
+                    })
+                }
+            }
+
+            else {
+                for (var i = 0; i < (options.tiles_in_a_column * options.tiles_in_a_row); i++) {
+                    $('[data-game]').append('<div class="tile"></div>');
+                    $('.tile').css({
+                        'width': options.preferred_tile_size + 'px',
+                        'max-width': "calc(100% / " + options.tiles_in_a_row + " - 2 * " + options.space_between_tiles + "px )",
+                        'margin': options.space_between_tiles + 'px'
+                    })
+                }
+            }
         }
 
         // getting the right images & randomizing them
