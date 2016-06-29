@@ -16,7 +16,7 @@ var app = {
             "tiles_in_a_column": 6,
             "preferred_tile_size": 200,
             "space_between_tiles": 10,
-            "background": "images/bg/treeson_blue.jpg",
+            "background": "bg/treeson_blue.jpg",
             // "background": "",
             "tiles_images_source_type": "server", // "local as another option"
             "tiles_images_source": "http://www.warzecha.org/ola/memory/images/",
@@ -71,7 +71,7 @@ var app = {
         });
         shuffleArray(randomizedTiles);
 
-        if (options.tiles_images_source_type == "local") {
+        if (options.tiles_images_source_type === "local") {
             $.ajax({
                 url: options.tiles_images_source,
                 success: function(data) {
@@ -152,7 +152,7 @@ var app = {
                     $(this).css('background-image', 'url("' + options.tiles_images_source + gameSetup[$(this).attr('id')][1] + '")');
 
                     if ($('.tile-first').length) {
-                        if ($(this).css('background-image') == $('.tile-first').css('background-image')) {
+                        if ($(this).css('background-image') === $('.tile-first').css('background-image')) {
 
                             $(this).addClass('tile-second').addClass('right');
                             $('.tile-first').addClass('right');
