@@ -21,8 +21,8 @@ var app = {
             "tiles_images_source_type": "server", // "local as another option"
             "tiles_images_source": "http://www.warzecha.org/ola/memory/images/",
             "tiles_images_json": "http://www.warzecha.org/ola/memory/enumpic.php" // my own source serving JSON - if you choose local, leave empty or do not use it at all
-                // "tiles_images_source_type": "local",
-                // "tiles_images_source": "images/"
+            // "tiles_images_source_type": "local",
+            // "tiles_images_source": "images/"
         };
 
         // setting the gameboard
@@ -57,7 +57,7 @@ var app = {
             }
         }
 
-        if (options.background != "") {
+        if (options.background !== "") {
             gameboard.css('background-image', 'url("' + options.background + '")');
         }
 
@@ -142,7 +142,7 @@ var app = {
 
         // gameplay - once game setup is ready
 
-        $(document).ajaxStop(function() {
+        $(document).on("ajaxStop", function() {
 
             $('.tile').on('click', function() {
                 if ($(this).hasClass('inactive') || $(this).hasClass('invisible')) {
@@ -180,7 +180,7 @@ var app = {
         // callback for disabling right tiles
 
         function disable() {
-            if (options.background != "") {
+            if (options.background !== "") {
                 $('.tile-first, .tile-second').removeClass().addClass('tile').addClass('invisible');
             } else {
                 $('.tile-first, .tile-second').removeClass().addClass('tile').addClass('inactive');
