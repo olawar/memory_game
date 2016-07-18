@@ -12,11 +12,11 @@ var options = {
     "space_between_tiles": 10,
     "background": "bg/treeson_blue.jpg",
     // "background": "",
-    // "tiles_images_source_type": "server", // "local as another option"
-    // "tiles_images_source": "http://www.warzecha.org/ola/memory/images/",
-    // "tiles_images_json": "http://www.warzecha.org/ola/memory/enumpic.php" // my own source serving JSON - if you choose local, leave an empty string or do not use it at all
-    "tiles_images_source_type": "local",
-    "tiles_images_source": "images/"
+    "tiles_images_source_type": "server", // "local as another option"
+    "tiles_images_source": "http://www.warzecha.org/ola/memory/images/",
+    "tiles_images_json": "http://www.warzecha.org/ola/memory/enumpic.php" // my own source serving JSON - if you choose local, leave an empty string or do not use it at all
+    // "tiles_images_source_type": "local",
+    // "tiles_images_source": "images/"
 };
 
 var app = {
@@ -146,7 +146,9 @@ var app = {
                 if (_tile.hasClass('inactive') || _tile.hasClass('invisible')) {
                     return false;
                 } else {
-                    _tile.addClass('flipped').css('background-image', 'url("' + options.tiles_images_source + gameSetup[$(this).attr('id')][1] + '")');
+                    if (_flipped.length <= 1) {
+                        _tile.addClass('flipped').css('background-image', 'url("' + options.tiles_images_source + gameSetup[$(this).attr('id')][1] + '")');
+                    }
                    checkFlipped();
                 }
             });
@@ -154,7 +156,7 @@ var app = {
         });
 
         // checking if we have a pair
-        
+
         function checkFlipped() {
             var _flipped = $('.flipped');
             if (_flipped.length == 2) {
